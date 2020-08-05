@@ -8,6 +8,9 @@ import environ
 ROOT_DIR = Path(__file__).resolve(strict=True).parent.parent.parent
 # sweb/
 APPS_DIR = ROOT_DIR / "sweb"
+TEMPLATE_DIR = ROOT_DIR / 'templates'
+# ROOT_DIR.joinpath('templates')
+print(f'templates in {TEMPLATE_DIR}')
 env = environ.Env()
 
 READ_DOT_ENV_FILE = env.bool("DJANGO_READ_DOT_ENV_FILE", default=False)
@@ -75,6 +78,7 @@ THIRD_PARTY_APPS = [
 
 LOCAL_APPS = [
     "sweb.users.apps.UsersConfig",
+    'lcore',
     # Your stuff: custom apps go here
 ]
 # https://docs.djangoproject.com/en/dev/ref/settings/#installed-apps
@@ -164,7 +168,7 @@ TEMPLATES = [
         # https://docs.djangoproject.com/en/dev/ref/settings/#std:setting-TEMPLATES-BACKEND
         "BACKEND": "django.template.backends.django.DjangoTemplates",
         # https://docs.djangoproject.com/en/dev/ref/settings/#template-dirs
-        "DIRS": [str(APPS_DIR / "templates")],
+        "DIRS": [str(ROOT_DIR / "templates")],
         "OPTIONS": {
             # https://docs.djangoproject.com/en/dev/ref/settings/#template-loaders
             # https://docs.djangoproject.com/en/dev/ref/templates/api/#loader-types
@@ -232,7 +236,6 @@ MANAGERS = ADMINS
 # ------------------------------------------------------------------------------
 # https://docs.djangoproject.com/en/dev/ref/settings/#logging
 # See https://docs.djangoproject.com/en/dev/topics/logging for
-# more details on how to customize your logging configuration.
 LOGGING = {
     "version": 1,
     "disable_existing_loggers": False,
@@ -254,7 +257,6 @@ LOGGING = {
 
 
 # django-allauth
-# ------------------------------------------------------------------------------
 ACCOUNT_ALLOW_REGISTRATION = env.bool("DJANGO_ACCOUNT_ALLOW_REGISTRATION", True)
 # https://django-allauth.readthedocs.io/en/latest/configuration.html
 ACCOUNT_AUTHENTICATION_METHOD = "username"
