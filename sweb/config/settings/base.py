@@ -10,7 +10,6 @@ ROOT_DIR = Path(__file__).resolve(strict=True).parent.parent.parent
 APPS_DIR = ROOT_DIR / "sweb"
 TEMPLATE_DIR = ROOT_DIR / 'templates'
 # ROOT_DIR.joinpath('templates')
-print(f'templates in {TEMPLATE_DIR}')
 env = environ.Env()
 
 READ_DOT_ENV_FILE = env.bool("DJANGO_READ_DOT_ENV_FILE", default=False)
@@ -43,9 +42,16 @@ LOCALE_PATHS = [str(ROOT_DIR / "locale")]
 # DATABASES
 # ------------------------------------------------------------------------------
 # https://docs.djangoproject.com/en/dev/ref/settings/#databases
-
+# export DATABASE_URL="sqlite:///db.sqlite"  run this in terminal
+# the below works on commandline but not on pycharm
+# DATABASES = {
+#     #"default": env.db("DATABASE_URL", default="postgres:///sweb")
+# }
 DATABASES = {
-    "default": env.db("DATABASE_URL", default="postgres:///sweb")
+    "default": {
+        'ENGINE': 'django.db.backends.sqlite3',
+        'NAME': str(ROOT_DIR / 'db.sqlite'),
+    }
 }
 DATABASES["default"]["ATOMIC_REQUESTS"] = True
 
