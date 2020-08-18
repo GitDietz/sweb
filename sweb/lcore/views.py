@@ -1,6 +1,10 @@
+import pathlib
+from django.conf import settings as conf_settings
 from django.db import connection
-from django.shortcuts import render
-from .models import Services, Reference, Article, Category, Tag
+from django.http import FileResponse
+from django.shortcuts import render, redirect
+
+from .models import Services, Reference, Article, Category, Tag, Feature, Skill
 
 
 def get_base_context():
@@ -54,10 +58,61 @@ def blog(request):
 
 def home(request):
     template = "home.html"
+    services = Services.objects.all()[:6]
     local_context = {
-        'destination': 'going home',
+        'services': services,
     }
 
     context = {**get_base_context(), **local_context}
     print(context)
+    return render(request, template, context)
+
+
+def pdf(request):
+    # TODO set up to take redirect to display all blog_article files
+    root = pathlib.Path(conf_settings.MEDIA_ROOT)
+    file_path = pathlib.Path.joinpath(root,'blog_image','Email_processing.pdf')
+    print(f'{file_path}')
+    return FileResponse(open(file_path, 'rb'), content_type='application/pdf')
+
+
+def show_pdf(request, pk):
+    root = pathlib.Path(conf_settings.MEDIA_ROOT)
+    try:
+        article = Article.objects.get(pk=pk)
+        filename = str(article.article_file)
+    except:
+        return redirect('lcore:blog')
+    if filename == '':
+        return redirect('lcore:blog')
+    file_path = pathlib.Path.joinpath(root, filename)
+    print(f'{file_path}')
+    return FileResponse(open(file_path, 'rb'), content_type='application/pdf')
+
+
+def services(request):
+    template = "services.html"
+    services = Services.objects.all()[:6]
+    features = Feature.objects.active()[:8]
+    local_context = {
+        'services': services,
+        'features': features,
+    }
+
+    context = {**get_base_context(), **local_context}
+    return render(request, template, context)
+
+
+def about(request):
+    template = "about.html"
+    services = Services.objects.all()[:6]
+    features = Feature.objects.active()[:8]
+    skill = Skill.objects.active()
+    local_context = {
+        'services': services,
+        'features': features,
+        'skill': skill,
+    }
+
+    context = {**get_base_context(), **local_context}
     return render(request, template, context)

@@ -995,7 +995,7 @@ section {
 # Our Skills
 --------------------------------------------------------------*/
 .skills .progress {
-  height: 50px;
+  height: 90px;
   display: block;
   background: none;
 }

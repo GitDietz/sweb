@@ -60,6 +60,36 @@ class TagManager(models.Manager):
         return qs
 
 
+class CustomerManager(models.Manager):
+    def all(self):
+        qs = super(CustomerManager, self).all()
+        return qs
+
+    def active(self):
+        qs = super(CustomerManager, self).filter(active=True)
+        return qs
+
+
+class FeatureManager(models.Manager):
+    def all(self):
+        qs = super(FeatureManager, self).all()
+        return qs
+
+    def active(self):
+        qs = super(FeatureManager, self).filter(active=True)
+        return qs
+
+
+class SkillManager(models.Manager):
+    def all(self):
+        qs = super(SkillManager, self).all()
+        return qs
+
+    def active(self):
+        qs = super(SkillManager, self).filter(active=True)
+        return qs
+
+
 # ## Models ## #
 
 class Tag(models.Model):
@@ -94,6 +124,8 @@ class Article(models.Model):
     tags = models.ManyToManyField(Tag, blank=True)
     category = models.ManyToManyField(Category, blank=True)
     image_file = models.FileField(upload_to='blog_image', blank=True, null=True)
+    article_file = models.FileField(upload_to='blog_article', blank=True, null=True)
+    project = models.BooleanField(default=False)
     objects = ArticleManager()
 
     class Meta:
@@ -120,6 +152,8 @@ class Services(models.Model):
     service = models.CharField(max_length=100, unique=True)
     date_added = models.DateTimeField(auto_now=False, auto_now_add=True)
     priority = models.IntegerField(null=False, unique=True)
+    image_file = models.FileField(upload_to='service_icon', blank=True, null=True)
+    descrip = models.CharField(max_length=300, blank=True, null=True)
     objects = ServicesManager()
 
     class Meta:
@@ -129,3 +163,44 @@ class Services(models.Model):
         return self.service.title()
 
 
+class Customer(models.Model):
+    name = models.CharField(max_length=100, unique=True)
+    sector = models.CharField(max_length=50, unique=False, blank=True, null=True)
+    date_added = models.DateTimeField(auto_now=False, auto_now_add=True)
+    image_file = models.FileField(upload_to='service_icon', blank=True, null=True)
+    descrip = models.CharField(max_length=300, blank=True, null=True)
+    active = models.BooleanField(default=True)
+    objects = CustomerManager()
+
+    class Meta:
+        ordering = ['name']
+
+    def __str__(self):
+        return self.name.title() or self.sector.title()
+
+
+class Feature(models.Model):
+    feature = models.CharField(max_length=50, unique=True)
+    image_file = models.FileField(upload_to='feature_icon', blank=True, null=True)
+    descrip = models.CharField(max_length=200, blank=True, null=True)
+    active = models.BooleanField(default=True)
+    objects = FeatureManager()
+
+    class Meta:
+        ordering = ['feature']
+
+    def __str__(self):
+        return self.feature.title()
+
+
+class Skill(models.Model):
+    skill = models.CharField(max_length=50, unique=True)
+    descrip = models.CharField(max_length=200, blank=True, null=True)
+    active = models.BooleanField(default=True)
+    objects = SkillManager()
+
+    class Meta:
+        ordering = ['skill']
+
+    def __str__(self):
+        return self.skill.title()

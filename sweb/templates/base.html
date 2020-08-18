@@ -14,8 +14,8 @@
   <meta content="" name="keywords">
 
   <!-- Favicons -->
-  <link href="{% static 'img/favicon.png' %}" rel="icon">
-  <link href="{% static 'img/apple-touch-icon.png' %}" rel="apple-touch-icon">
+  <link href="{% static 'images/favicon.ico' %}" rel="icon">
+  <link href="{% static 'images/apple-touch-icon.png' %}" rel="apple-touch-icon">
 
   <!-- Google Fonts -->
   <link href="https://fonts.googleapis.com/css?family=Open+Sans:300,300i,400,400i,600,600i,700,700i|Roboto:300,300i,400,400i,500,500i,600,600i,700,700i|Poppins:300,300i,400,400i,500,500i,600,600i,700,700i" rel="stylesheet">
@@ -57,9 +57,9 @@
 
       <nav class="nav-menu d-none d-lg-block">
         <ul>
-          <li><a href="index.html">Home</a></li>
-          <li class="drop-down"><a href="">About</a>
-            <ul>
+          <li><a href="{% url 'lcore:home' %}">Home</a></li>
+          <li ><a href="{% url 'lcore:about' %}">About</a>
+            <!--class="drop-down"<ul>
               <li class="active"><a href="about.html">About Us</a></li>
               <li><a href="team.html">Team</a></li>
               <li><a href="testimonials.html">Testimonials</a></li>
@@ -72,12 +72,12 @@
                   <li><a href="#">Deep Drop Down 5</a></li>
                 </ul>
               </li>
-            </ul>
+            </ul> -->
           </li>
 
-          <li><a href="services.html">Services</a></li>
+          <li><a href="{% url 'lcore:services' %}">Services</a></li>
           <li><a href="portfolio.html">Portfolio</a></li>
-          <li><a href="blog.html">Blog</a></li>
+          <li><a href="{% url 'lcore:blog' %}">Blog</a></li>
           <li><a href="contact.html">Contact</a></li>
 
         </ul>

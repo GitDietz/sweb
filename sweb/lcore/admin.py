@@ -1,6 +1,6 @@
 from django.contrib import admin
 
-from .models import Services, Reference, Article, Category, Tag
+from .models import Services, Reference, Article, Category, Tag, Customer, Feature, Skill
 
 
 class ArticleAdmin(admin.ModelAdmin):
@@ -21,6 +21,26 @@ class CategoryAdmin(admin.ModelAdmin):
 
 
 admin.site.register(Category, CategoryAdmin)
+
+
+class CustomerAdmin(admin.ModelAdmin):
+    list_display = ['name', 'sector']
+
+    class Meta:
+        model = Customer
+
+
+admin.site.register(Customer, CustomerAdmin)
+
+
+class FeatureAdmin(admin.ModelAdmin):
+    list_display = ['feature', 'active']
+
+    class Meta:
+        model = Feature
+
+
+admin.site.register(Feature, FeatureAdmin)
 
 
 class RefAdmin(admin.ModelAdmin):
@@ -51,3 +71,13 @@ class TagAdmin(admin.ModelAdmin):
 
 
 admin.site.register(Tag, TagAdmin)
+
+
+class SkillAdmin(admin.ModelAdmin):
+    list_display = ['skill', 'active']
+
+    class Meta:
+        model = Skill
+
+
+admin.site.register(Skill, SkillAdmin)
