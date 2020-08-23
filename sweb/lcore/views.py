@@ -4,6 +4,8 @@ from django.db import connection
 from django.http import FileResponse
 from django.shortcuts import render, redirect
 
+from .email import email_main
+from .forms import ContactForm
 from .models import Services, Reference, Article, Category, Tag, Feature, Skill
 
 
@@ -22,7 +24,7 @@ def get_base_context():
             'co_country': co_country,
             'co_phone': co_phone,
             'co_email': co_email,
-    }
+            }
 
 
 def base(request):
@@ -35,9 +37,12 @@ def blog(request):
     template = "blog.html"
     active_articles = Article.objects.visible()
     recent_articles = Article.objects.recent_five()
-    active_tags = Tag.objects.active() #change to used
+    active_tags = Tag.objects.active()  # change to used
     with connection.cursor() as cursor:
-        cursor.execute("Select C.name, count(C.name) as cat_count from lcore_article_category as JJ inner join lcore_category C on JJ.category_id = C.id group by name;")
+        sql = ("Select C.name, count(C.name) as cat_count from lcore_article_category as JJ inner join"
+               " lcore_category C on JJ.category_id = C.id group by name;")
+        print(sql)
+        cursor.execute(sql)
         columns = [col[0] for col in cursor.description]
         category_count = [
             dict(zip(columns, row))
@@ -69,9 +74,8 @@ def home(request):
 
 
 def pdf(request):
-    # TODO set up to take redirect to display all blog_article files
     root = pathlib.Path(conf_settings.MEDIA_ROOT)
-    file_path = pathlib.Path.joinpath(root,'blog_image','Email_processing.pdf')
+    file_path = pathlib.Path.joinpath(root, 'blog_image', 'Email_processing.pdf')
     print(f'{file_path}')
     return FileResponse(open(file_path, 'rb'), content_type='application/pdf')
 
@@ -116,3 +120,30 @@ def about(request):
 
     context = {**get_base_context(), **local_context}
     return render(request, template, context)
+
+
+def contact(request):
+    """ process the form to sedn the email for enquiry """
+    form = ContactForm()
+
+    template_name = 'contact_form.html'
+
+    if request.method == 'POST':
+
+        if form.is_valid():
+            data = request.POST.copy()
+            email_kwargs = {"enquiry_from": data.get('full_name'),
+                            'email': data.get('full_name'),
+                            'content':data.get('full_name'),
+                            }
+        send_result, sender = email_main(False, **email_kwargs)
+        if send_result != 0:
+
+            #  send_result contains the body. The below creates a custom url to contain the invite text
+            base_url = reverse('complete')
+            query_string = urlencode({'send_result': send_result})
+            url = f'{base_url}?{query_string}'
+            return redirect(url)
+        else:
+            return redirect('complete')
+

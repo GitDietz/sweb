@@ -43,7 +43,7 @@
               <p>
                 {{art.extract}}</p>
               <div class="read-more">
-                <a href="blog-single.html">Read More</a>
+                <a href="{% url 'lcore:show_pdf' pk=art.id %}">Read More</a>
               </div>
             </div>
           </article>

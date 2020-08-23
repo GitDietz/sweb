@@ -226,6 +226,9 @@ ehthumbs_vista.db
 
 # Folder config file
 Desktop.ini
+# settings ini
+settings.ini
+
 
 # Recycle Bin used on file shares
 $RECYCLE.BIN/
