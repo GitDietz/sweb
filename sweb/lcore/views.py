@@ -1,10 +1,11 @@
 import pathlib
 from django.conf import settings as conf_settings
+from django.contrib import messages
 from django.db import connection
 from django.http import FileResponse
 from django.shortcuts import render, redirect
 
-from .email import email_main
+from .email import send_email
 from .forms import ContactForm
 from .models import Services, Reference, Article, Category, Tag, Feature, Skill
 
@@ -126,24 +127,30 @@ def contact(request):
     """ process the form to sedn the email for enquiry """
     form = ContactForm()
 
-    template_name = 'contact_form.html'
+    template_name = 'contact_page.html'
 
     if request.method == 'POST':
-
+        form = ContactForm(request.POST)
         if form.is_valid():
             data = request.POST.copy()
-            email_kwargs = {"enquiry_from": data.get('full_name'),
-                            'email': data.get('full_name'),
-                            'content':data.get('full_name'),
+            body = f'Enquiry from {data.get("full_name")}, regarding {data.get("content")}'
+            email_kwargs = {'email': data.get('email'),
+                            'subject': data.get('subject'),
+                            'content': body,
                             }
-        send_result, sender = email_main(False, **email_kwargs)
-        if send_result != 0:
+            send_result, sender = send_email(**email_kwargs)
+            if send_result != 0:
+                messages.error(request, f"Your email could not be sent, please email us direct on {sender}")
+            else:
+                messages.success(request, "Your email was successfully sent")
 
-            #  send_result contains the body. The below creates a custom url to contain the invite text
-            base_url = reverse('complete')
-            query_string = urlencode({'send_result': send_result})
-            url = f'{base_url}?{query_string}'
-            return redirect(url)
-        else:
-            return redirect('complete')
+            # TODO: setup messages to update this form as sent or failed
 
+        # else:
+        #     return redirect('home')
+
+    local_context = {
+        'form': form,
+    }
+    context = {**get_base_context(), **local_context}
+    return render(request, template_name, context)
