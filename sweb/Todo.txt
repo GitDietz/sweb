@@ -1,0 +1,3 @@
+done - Fix the single blog page
+fix pagination on the blog page
+done - delete blog-single.thml

@@ -3,6 +3,7 @@ from django.conf import settings as conf_settings
 from django.contrib import messages
 from django.db import connection
 from django.http import FileResponse
+from django.core.paginator import Paginator, EmptyPage, PageNotAnInteger
 from django.shortcuts import render, redirect
 
 from .email import send_email
@@ -35,6 +36,11 @@ def base(request):
 
 
 def blog(request):
+    """
+    General blog page with summary of blogs and links to individuals
+    :param request:
+    :return:
+    """
     template = "blog.html"
     active_articles = Article.objects.visible()
     recent_articles = Article.objects.recent_five()
@@ -50,11 +56,43 @@ def blog(request):
             for row in cursor.fetchall()
         ]
 
+    page = request.GET.get('page', 1)
+    paginator = Paginator(active_articles, 5)
+    try:
+        article_page = paginator.page(page)
+    except PageNotAnInteger:
+        article_page = paginator.page(1)
+    except EmptyPage:
+        article_page = paginator.page(paginator.num_pages)
+
     local_context = {
-        'articles': active_articles,
+        'articles': article_page,
         'recent_articles': recent_articles,
         'active_tags': active_tags,
         'category_count': category_count
+    }
+
+    context = {**get_base_context(), **local_context}
+    print(context)
+    return render(request, template, context)
+
+
+def blog_item(request, pk):
+    """
+    more detail on the specific blog item to read the more detailed description
+    :param request:
+    :param pk:
+    :return: render
+    """
+    try:
+        article = Article.objects.get(pk=pk)
+
+    except:
+        return redirect('lcore:blog')
+    template = "blog_detail.html"
+
+    local_context = {
+        'article': article,
     }
 
     context = {**get_base_context(), **local_context}

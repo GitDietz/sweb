@@ -30,13 +30,14 @@
                  <img src="{{ MEDIA_URL }}/{{ art.image_file }}" alt="" class="img-fluid">
             </div>
             <h2 class="entry-title">
-              <a href="blog-single.html">{{art.caption}}</a>
+              <a href="{% url 'lcore:blog_item' pk=art.id %}">{{art.caption}}</a>
+
             </h2>
             <div class="entry-meta">
               <ul>
-                <li class="d-flex align-items-center"><i class="icofont-user"></i> <a href="blog-single.html">{{art.author}}</a></li>
-                <li class="d-flex align-items-center"><i class="icofont-wall-clock"></i> <a href="blog-single.html"><time datetime="2020-01-01">{{art.date_added}}</time></a></li>
-                <li class="d-flex align-items-center"><i class="icofont-comment"></i> <a href="blog-single.html">12 Comments</a></li>
+                <li class="d-flex align-items-center"><i class="icofont-user"></i> {{art.author}}</li>
+                <li class="d-flex align-items-center"><i class="icofont-wall-clock"></i> <time datetime="2020-01-01">{{art.date_added}}</time></li>
+                <li class="d-flex align-items-center"><i class="icofont-comment"></i> 12 Comments</li>
               </ul>
             </div>
             <div class="entry-content">
@@ -53,13 +54,38 @@
   <!-- End blog entry -->
 
   <div class="blog-pagination">
-    <ul class="justify-content-center">
-      <li class="disabled"><i class="icofont-rounded-left"></i></li>
-      <li><a href="#">1</a></li>
-      <li class="active"><a href="#">2</a></li>
-      <li><a href="#">3</a></li>
-      <li><a href="#"><i class="icofont-rounded-right"></i></a></li>
-    </ul>
+    {% if articles.has_other_pages %}
+  <ul class="justify-content-center">
+    {% if articles.has_previous %}
+      <!--<li class="page-item"><a class="page-link" href="?page={{ object_list.previous_page_number }}">&laquo; </a></li>-->
+      <li>
+          <a class="active" href="?page={{ articles.previous_page_number }}">Previous</a>
+      </li>
+    {% else %}
+      <li class="disabled">
+          <a href="#" tabindex="-1">Previous</a>
+      </li>
+    {% endif %}
+
+    {% for i in articles.paginator.page_range %}
+      {% if articles.number == i %}
+        <li class="active"> {{ i }} </li>
+      {% else %}
+        <li><a href="?page={{i}}">{{ i }}</a></li>
+      {% endif %}
+    {% endfor %}
+
+    {% if articles.has_next %}
+      <li>
+          <a class="active" href="? page={{articles.next_page_number }}"><i class="icofont-rounded-right"></i></a>
+      </li>
+    {% else %}
+      <li class="disabled">
+          <a href="#" tabindex="-1">Next</a>
+      </li>
+    {% endif %}
+  </ul>
+  {% endif %}
   </div>
 
   </div><!-- End blog entries list -->
