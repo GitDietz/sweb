@@ -1,2 +1,5 @@
 
 .DS_Store
+.idea/ASharpWeb.iml
+*.xml
+*.iml

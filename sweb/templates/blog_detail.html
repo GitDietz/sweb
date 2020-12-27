@@ -29,7 +29,7 @@
             <div class="entry-img">
                  <img src="{{ MEDIA_URL }}/{{ article.image_file }}" alt="" class="img-fluid">
             </div>
-            {% if not story_extract_same %}
+            {% if story_extract_differ %}
             <h2 class="entry-title">
               {{article.extract}}
             </h2>

@@ -1,3 +1,4 @@
 done - Fix the single blog page
-fix pagination on the blog page
+done - fix pagination on the blog page
 done - delete blog-single.thml
+done - article extract - hide if the same as the story

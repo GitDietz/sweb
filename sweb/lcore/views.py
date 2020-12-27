@@ -92,10 +92,10 @@ def blog_item(request, pk):
     template = "blog_detail.html"
 
     if article.extract != article.story:
-        story_extract_same = True
+        story_extract_differ = True
     local_context = {
         'article': article,
-        'story_extract_same':story_extract_same,
+        'story_extract_differ': story_extract_differ,
     }
 
     context = {**get_base_context(), **local_context}

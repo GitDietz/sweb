@@ -1,0 +1,4 @@
+Config the run editor
+Script path: /Users/dieterthierry/Documents/Workspace/Recipe/manage.py
+Parameters: run server
+Set the interpreter to the relevant one
