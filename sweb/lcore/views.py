@@ -91,8 +91,11 @@ def blog_item(request, pk):
         return redirect('lcore:blog')
     template = "blog_detail.html"
 
+    if article.extract != article.story:
+        story_extract_same = True
     local_context = {
         'article': article,
+        'story_extract_same':story_extract_same,
     }
 
     context = {**get_base_context(), **local_context}
