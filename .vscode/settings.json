@@ -1,4 +1,6 @@
 {
     "python.pythonPath": "/Users/dieterthierry/Documents/Workspace/VMs/ASW/bin/python3.7",
-    "editor.fontSize": 10
+    "editor.fontSize": 10,
+    "vscode_custom_css.imports": ["file:///Users/MyUserName/Documents/custom.css"],
+    "vscode_custom_css.policy": true,
 }

@@ -1,10 +1,13 @@
 from io import BytesIO
+import logging
 from django.core.files import File
 from django.db import models
 
 from PIL import Image, ImageDraw
 import qrcode
 
+
+db_logger = logging.getLogger('db')
 
 class QR(models.Model):
     """
@@ -17,6 +20,7 @@ class QR(models.Model):
         return str(self.name)
 
     def save(self, *args, **kwargs):
+        db_logger.info(f'Start save for {self.name}')
         qrcode_img = qrcode.make(self.name)
         canvas = Image.new('RGB', (290, 290), 'white')
         draw = ImageDraw.Draw(canvas)
