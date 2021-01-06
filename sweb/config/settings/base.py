@@ -85,6 +85,7 @@ THIRD_PARTY_APPS = [
 LOCAL_APPS = [
     "sweb.users.apps.UsersConfig",
     'lcore',
+    'django_db_logger',
     # Your stuff: custom apps go here
 ]
 # https://docs.djangoproject.com/en/dev/ref/settings/#installed-apps
@@ -252,6 +253,9 @@ LOGGING = {
         "verbose": {
             "format": "%(levelname)s %(asctime)s %(module)s "
             "%(process)d %(thread)d %(message)s"
+        },
+        "db_simple": {
+            "format": "%(levelname)s %(asctime)s %(module)s %(function)s %(message)s"
         }
     },
     "handlers": {
@@ -259,9 +263,22 @@ LOGGING = {
             "level": "DEBUG",
             "class": "logging.StreamHandler",
             "formatter": "verbose",
+        },
+        "db_log": {
+            "level": "INFO",
+            "class": 'django_db_logger.db_log_handler.DatabaseLogHandler',
+            "formatter": "db_simple",
         }
     },
-    "root": {"level": "INFO", "handlers": ["console"]},
+    "root": {
+        "level": "INFO", "handlers": ["console"]
+        },
+    'loggers': {
+        'db': {
+            'handlers': ['db_log'],
+            'level': 'INFO'
+        }
+    }
 }
 
 

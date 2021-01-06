@@ -2,6 +2,7 @@ import logging
 import pathlib
 from django.conf import settings as conf_settings
 from django.contrib import messages
+from django.core.cache import cache
 from django.db import connection
 from django.http import FileResponse
 from django.core.paginator import Paginator, EmptyPage, PageNotAnInteger
@@ -12,17 +13,29 @@ from .forms import ContactForm
 from .models import Services, Reference, Article, Category, Tag, Feature, Skill
 
 
-logger = logging.getLogger(__name__)
+logger = logging.getLogger('db')
 
 
 def get_base_context():
     service_list = Services.objects.top_five()
-    company = Reference.objects.get(primary=1)
-    co_name = company.company
-    co_addr = company.address
-    co_country = company.country
-    co_phone = company.phone
-    co_email = company.email
+    if cache.get('co_name'):
+        logger.info('cache exists')
+    else:
+        logger.info('no cache')
+        company = Reference.objects.get(primary=1)
+        cache.set('co_name', company.company, 60 * 60)
+        cache.set('co_addr', company.address, 60 * 60)
+        cache.set('co_country', company.country, 60 * 60)
+        cache.set('co_phone', company.phone, 60 * 60)
+        cache.set('co_email', company.email, 60 * 60)
+
+    co_name = cache.get('co_name')
+    co_addr = cache.get('co_addr')
+    co_country = cache.get('co_country')
+    co_phone = cache.get('co_phone')
+    co_email = cache.get('co_email')
+
+
     logger.info(co_name)
     return {'service_list': service_list,
             'co_name': co_name,
