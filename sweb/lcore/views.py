@@ -1,3 +1,4 @@
+import logging
 import pathlib
 from django.conf import settings as conf_settings
 from django.contrib import messages
@@ -11,6 +12,9 @@ from .forms import ContactForm
 from .models import Services, Reference, Article, Category, Tag, Feature, Skill
 
 
+logger = logging.getLogger(__name__)
+
+
 def get_base_context():
     service_list = Services.objects.top_five()
     company = Reference.objects.get(primary=1)
@@ -19,7 +23,7 @@ def get_base_context():
     co_country = company.country
     co_phone = company.phone
     co_email = company.email
-    print(co_name)
+    logger.info(co_name)
     return {'service_list': service_list,
             'co_name': co_name,
             'co_addr': co_addr,
