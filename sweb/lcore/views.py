@@ -3,20 +3,24 @@ import pathlib
 from django.conf import settings as conf_settings
 from django.contrib import messages
 from django.core.cache import cache
+from django.core.exceptions import ObjectDoesNotExist
 from django.db import connection
 from django.http import FileResponse
 from django.core.paginator import Paginator, EmptyPage, PageNotAnInteger
 from django.shortcuts import render, redirect
 
-from .email import send_email
+from .emailer import send_email
 from .forms import ContactForm
-from .models import Services, Reference, Article, Category, Tag, Feature, Skill
+from .models import Services, Reference, Article, Tag, Feature, Skill
 
 
 logger = logging.getLogger('db')
 
 
 def get_base_context():
+    """
+        provides the base context data used for the header and footer on each page
+    """
     service_list = Services.objects.top_five()
     if cache.get('co_name'):
         logger.info('cache exists')
@@ -36,7 +40,7 @@ def get_base_context():
     co_email = cache.get('co_email')
 
 
-    logger.info(co_name)
+    logger.info('Prepare return')
     return {'service_list': service_list,
             'co_name': co_name,
             'co_addr': co_addr,
@@ -47,6 +51,9 @@ def get_base_context():
 
 
 def base(request):
+    """
+        base view
+    """
     template = "base.html"
     context = {}
     return render(request, template, context)
@@ -90,7 +97,7 @@ def blog(request):
     }
 
     context = {**get_base_context(), **local_context}
-    print(context)
+    logger.info('blog view - context ready')
     return render(request, template, context)
 
 
@@ -116,11 +123,14 @@ def blog_item(request, pk):
     }
 
     context = {**get_base_context(), **local_context}
-    print(context)
+    logger.info('blog item view - context ready')
     return render(request, template, context)
 
 
 def home(request):
+    """
+        home page
+    """
     template = "home.html"
     services = Services.objects.all()[:6]
     local_context = {
@@ -128,32 +138,41 @@ def home(request):
     }
 
     context = {**get_base_context(), **local_context}
-    print(context)
+    logger.info('home view - context ready')
     return render(request, template, context)
 
 
 def pdf(request):
+    """
+        tester view
+    """
     root = pathlib.Path(conf_settings.MEDIA_ROOT)
     file_path = pathlib.Path.joinpath(root, 'blog_image', 'Email_processing.pdf')
-    print(f'{file_path}')
+    #print(f'{file_path}')
     return FileResponse(open(file_path, 'rb'), content_type='application/pdf')
 
 
 def show_pdf(request, pk):
+    """
+        view will render the pdf file for the article if it exists
+    """
     root = pathlib.Path(conf_settings.MEDIA_ROOT)
     try:
         article = Article.objects.get(pk=pk)
         filename = str(article.article_file)
-    except:
+    except ObjectDoesNotExist:
         return redirect('lcore:blog')
     if filename == '':
         return redirect('lcore:blog')
     file_path = pathlib.Path.joinpath(root, filename)
-    print(f'{file_path}')
+    logger.info(f'Pdf is {file_path}')
     return FileResponse(open(file_path, 'rb'), content_type='application/pdf')
 
 
 def services(request):
+    """
+    Services view
+    """
     template = "services.html"
     services = Services.objects.all()[:6]
     features = Feature.objects.active()[:8]
@@ -167,6 +186,9 @@ def services(request):
 
 
 def about(request):
+    """
+    About page view
+    """
     template = "about.html"
     services = Services.objects.all()[:6]
     features = Feature.objects.active()[:8]
