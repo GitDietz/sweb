@@ -31,13 +31,6 @@
   <link href="{% static 'vendor/remixicon/remixicon.css' %}" rel="stylesheet">
   <link href="{% static 'css/style.css' %}" rel="stylesheet">
 
- <!-- django references TODO - remove
-     <link href="{% static 'img/' %}" rel="">
-     <link href="{% static '' %}" rel="stylesheet">
-    <link rel="shortcut icon" type="image/png" href="{% static 'images/favicon.ico' %}">
-    <link rel="stylesheet" href='{% static "css/style.css" %}'/>
--->
-
     <style>
         {% block style %}
         {% endblock style %}
@@ -92,18 +85,18 @@
 
     </div>
   </header><!-- End Header -->
-{{% block hero %}
- {% endblock hero %}
+{% block hero %}
+{% endblock hero %}
 <div class="container"> <!--this is where the main body will go   -->
 
-    {% if messages %}
-        {% for message in messages %}
-            <div class="alert {% if message.tags %}alert-{{ message.tags }}{% endif %}">{{ message }}<button type="button" class="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">&times;</span></button></div>
-        {% endfor %}
-    {% endif %}
-
-    {% block content %}
-    {% endblock content %}
+  {% if messages %}
+      {% for message in messages %}
+          <div class="alert {% if message.tags %}alert-{{ message.tags }}{% endif %}">{{ message }}<button type="button" class="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">&times;</span></button></div>
+      {% endfor %}
+  {% endif %}
+  <br><br>
+  {% block content %}
+  {% endblock content %}
 
 </div> <!-- /container -->
 

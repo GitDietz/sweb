@@ -1,25 +1,41 @@
+import logging
 import pathlib
 from django.conf import settings as conf_settings
 from django.contrib import messages
+from django.core.cache import cache
 from django.db import connection
 from django.http import FileResponse
 from django.core.paginator import Paginator, EmptyPage, PageNotAnInteger
 from django.shortcuts import render, redirect
 
-from .email import send_email
+from .emailer import send_email
 from .forms import ContactForm
 from .models import Services, Reference, Article, Category, Tag, Feature, Skill
 
 
+logger = logging.getLogger('db')
+
+
 def get_base_context():
     service_list = Services.objects.top_five()
-    company = Reference.objects.get(primary=1)
-    co_name = company.company
-    co_addr = company.address
-    co_country = company.country
-    co_phone = company.phone
-    co_email = company.email
-    print(co_name)
+    if cache.get('co_name'):
+        logger.info('cache exists')
+    else:
+        logger.info('no cache')
+        company = Reference.objects.get(primary=1)
+        cache.set('co_name', company.company, 60 * 60)
+        cache.set('co_addr', company.address, 60 * 60)
+        cache.set('co_country', company.country, 60 * 60)
+        cache.set('co_phone', company.phone, 60 * 60)
+        cache.set('co_email', company.email, 60 * 60)
+
+    co_name = cache.get('co_name')
+    co_addr = cache.get('co_addr')
+    co_country = cache.get('co_country')
+    co_phone = cache.get('co_phone')
+    co_email = cache.get('co_email')
+
+    logger.info(co_name)
     return {'service_list': service_list,
             'co_name': co_name,
             'co_addr': co_addr,
@@ -73,7 +89,6 @@ def blog(request):
     }
 
     context = {**get_base_context(), **local_context}
-    print(context)
     return render(request, template, context)
 
 
@@ -165,11 +180,10 @@ def about(request):
 
 
 def contact(request):
-    """ process the form to sedn the email for enquiry """
+    """ process the form to send the email for enquiry """
     form = ContactForm()
-
+    send_status = 2
     template_name = 'contact_page.html'
-
     if request.method == 'POST':
         form = ContactForm(request.POST)
         if form.is_valid():
@@ -177,21 +191,21 @@ def contact(request):
             body = f'Enquiry from {data.get("full_name")}, regarding {data.get("content")}'
             email_kwargs = {'email': data.get('email'),
                             'subject': data.get('subject'),
+                            'full_name': data.get('full_name'),
                             'content': body,
                             }
             send_result, sender = send_email(**email_kwargs)
             if send_result != 0:
                 messages.error(request, f"Your email could not be sent, please email us direct on {sender}")
+                send_status = 1
             else:
                 messages.success(request, "Your email was successfully sent")
-
-            # TODO: setup messages to update this form as sent or failed
-
-        # else:
-        #     return redirect('home')
+                send_status = 0
 
     local_context = {
         'form': form,
+        'send_status': send_status,
     }
+
     context = {**get_base_context(), **local_context}
     return render(request, template_name, context)
