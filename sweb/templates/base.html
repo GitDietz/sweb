@@ -72,7 +72,7 @@
           <!--<li><a href="portfolio.html">Portfolio</a></li>-->
           <li><a href="{% url 'lcore:blog' %}">Blog</a></li>
           <li><a href="{% url 'lcore:contact' %}">Contact</a></li>
-
+          <li><a href="{% url 'lcore:terms' %}">Terms of Use</a></li>
         </ul>
       </nav><!-- .nav-menu -->
 
@@ -124,11 +124,11 @@
           <div class="col-lg-2 col-md-6 footer-links">
             <h4>Useful Links</h4>
             <ul>
-              <li><i class="bx bx-chevron-right"></i> <a href="#">Home</a></li>
-              <li><i class="bx bx-chevron-right"></i> <a href="#">About us</a></li>
-              <li><i class="bx bx-chevron-right"></i> <a href="#">Services</a></li>
-              <li><i class="bx bx-chevron-right"></i> <a href="#">Terms of service</a></li>
-              <li><i class="bx bx-chevron-right"></i> <a href="#">Privacy policy</a></li>
+              <li><i class="bx bx-chevron-right"></i> <a href="{% url 'lcore:home' %}">Home</a></li>
+              <li><i class="bx bx-chevron-right"></i> <a href="{% url 'lcore:about' %}">About us</a></li>
+              <li><i class="bx bx-chevron-right"></i> <a href="{% url 'lcore:services' %}">Services</a></li>
+              <li><i class="bx bx-chevron-right"></i> <a href="{% url 'lcore:terms' %}">Terms of service</a></li>
+              <li><i class="bx bx-chevron-right"></i> <a href="{% url 'lcore:privacy' %}">Privacy</a></li>
             </ul>
           </div>
 

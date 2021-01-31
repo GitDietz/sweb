@@ -209,3 +209,23 @@ def contact(request):
 
     context = {**get_base_context(), **local_context}
     return render(request, template_name, context)
+
+
+def terms(request):
+    template = "terms.html"
+    local_context = {
+      'title': 'Website terms and conditions'
+    }
+
+    context = {**get_base_context(), **local_context}
+    return render(request, template, context)
+
+
+def privacy(request):
+    template = "privacy.html"
+    local_context = {
+      'title': 'Website terms and conditions'
+    }
+
+    context = {**get_base_context(), **local_context}
+    return render(request, template, context)

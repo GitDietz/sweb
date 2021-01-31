@@ -19,3 +19,7 @@ django-decouple==2.1
 # Email handler
 # ----------------------------------
 sendgrid==6.2.0
+
+# Other
+# ----------------------
+django-db-logger==0.1.10
