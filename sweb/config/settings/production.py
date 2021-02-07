@@ -6,7 +6,8 @@ from .base import *  # noqa
 SECRET_KEY = config("DJANGO_SECRET_KEY")
 # https://docs.djangoproject.com/en/dev/ref/settings/#allowed-hosts
 # ALLOWED_HOSTS = env.list("DJANGO_ALLOWED_HOSTS", default=["asharpsystems.com"])
-ALLOWED_HOSTS =config('ALLOWED_HOSTS_PROD', cast=lambda v: [s.strip() for s in v.split(',')])
+# ALLOWED_HOSTS =config('ALLOWED_HOSTS_PROD', cast=lambda v: [s.strip() for s in v.split(',')])
+ALLOWED_HOSTS = config('ALLOWED_HOSTS_PROD', cast=Csv())
 # DATABASES
 # ------------------------------------------------------------------------------
 DATABASES["default"] = env.db("DATABASE_URL")  # noqa F405
