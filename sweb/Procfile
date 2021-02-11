@@ -1,1 +1,1 @@
-web: gunicorn sweb.wsgi --log-file -
+web: gunicorn config.wsgi -w 3
