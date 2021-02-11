@@ -19,7 +19,7 @@ READ_DOT_ENV_FILE = config("DJANGO_READ_DOT_ENV_FILE", cast=bool)
 # GENERAL
 # ------------------------------------------------------------------------------
 # https://docs.djangoproject.com/en/dev/ref/settings/#debug
-DEBUG = config("DJANGO_DEBUG_DEV", cast=bool)
+DEBUG = config("DJANGO_DEBUG", cast=bool)
 # Local time zone. Choices are
 # http://en.wikipedia.org/wiki/List_of_tz_zones_by_name
 # though not all of them may be available with every OS.
@@ -232,7 +232,7 @@ EMAIL_FROM = config('MAIL_SENDER')
 # Django Admin URL.
 ADMIN_URL = "admin/"
 # https://docs.djangoproject.com/en/dev/ref/settings/#admins
-ADMINS = [("""D Thierry""", "asharpsystems@google.com")]
+ADMINS = [("""D Thierry""", "asharpsystems@gmail.com")]
 # https://docs.djangoproject.com/en/dev/ref/settings/#managers
 MANAGERS = ADMINS
 
