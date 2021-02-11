@@ -7,6 +7,7 @@ import environ
 import os
 
 ROOT_DIR = Path(__file__).resolve(strict=True).parent.parent.parent
+BASE_DIR = ROOT_DIR
 # sweb/
 APPS_DIR = ROOT_DIR / "sweb"
 TEMPLATE_DIR = ROOT_DIR / 'templates'
