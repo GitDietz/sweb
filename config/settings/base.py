@@ -3,7 +3,8 @@ Base settings to build other settings files upon.
 """
 from pathlib import Path
 from decouple import config, Csv
-# import environ
+import environ
+import os
 
 ROOT_DIR = Path(__file__).resolve(strict=True).parent.parent.parent
 # sweb/
@@ -225,7 +226,7 @@ X_FRAME_OPTIONS = "DENY"
 EMAIL_BACKEND = config("DJANGO_EMAIL_BACKEND")
 # https://docs.djangoproject.com/en/dev/ref/settings/#email-timeout
 EMAIL_TIMEOUT = 5
-EMAIL_KEY = config('MAIL_API_KEY') # no default or cast used
+EMAIL_KEY = os.environ.get('MAIL_API_KEY') # no default or cast used
 EMAIL_FROM = config('MAIL_SENDER')
 # ADMIN
 # ------------------------------------------------------------------------------

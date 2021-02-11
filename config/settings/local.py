@@ -5,7 +5,7 @@ from .base import *  # noqa
 # https://docs.djangoproject.com/en/dev/ref/settings/#debug
 
 # https://docs.djangoproject.com/en/dev/ref/settings/#secret-key
-SECRET_KEY = config("DJANGO_SECRET_KEY")
+SECRET_KEY = os.environ.get("DJANGO_SECRET_KEY", default='1el0bsuhrOlAEQMOJUIs7aT30mruBVy7C7kAXOkAUN6yhIKWFzoaFRys5lxuZnoX')
 # https://docs.djangoproject.com/en/dev/ref/settings/#allowed-hosts
 # ALLOWED_HOSTS = ["localhost", "0.0.0.0", "127.0.0.1"]
 ALLOWED_HOSTS = config('ALLOWED_HOSTS_DEV', cast=Csv())

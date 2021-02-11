@@ -330,12 +330,10 @@ tags
 [Ss]cripts
 pyvenv.cfg
 pip-selfcheck.json
-.env
-
 
 ### Project template
 
-sweb/media/
+# sweb/media/
 
 .pytest_cache/
 
