@@ -27,7 +27,7 @@
           {% for art in articles %}
           <article class="entry" data-aos="fade-up">
             <div class="entry-img">
-                 <img src="{{ MEDIA_URL }}/{{ art.image_file }}" alt="" class="img-fluid">
+                 <img src="{% static art.image_link %}" alt="" class="img-fluid">
             </div>
             <h2 class="entry-title">
               <a href="{% url 'lcore:blog_item' pk=art.id %}">{{art.caption}}</a>
@@ -119,8 +119,9 @@
         {% if recent_articles %}
         {% for a in recent_articles %}
         <div class="post-item clearfix">
-          <!--<img src="{% static 'images/blog-recent-posts-1.jpg' %}" alt=""/>-->
-          <img src="{{ MEDIA_URL }}/{{ a.image_file }}" alt="">
+          <!--<img src="{% static 'images/blog-recent-posts-1.jpg' %}" alt=""/>
+          <img src="{{ MEDIA_URL }}{{ a.image_file }}" alt="">-->
+          <img src="{% static a.article_link %}" alt="" >
           <h4><a href="{% url 'lcore:blog_item' pk=a.id %}">{{ a.caption }}</a></h4>
           <time datetime="2020-01-01">{{ a.date_added }}</time>
         </div>

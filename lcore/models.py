@@ -1,3 +1,4 @@
+import pathlib
 from django.db import models
 
 
@@ -134,6 +135,16 @@ class Article(models.Model):
     def __str__(self):
         return self.caption.title()
 
+    @property
+    def image_link(self):
+        p = pathlib.Path(self.image_file.path)
+        return 'images/' + str(pathlib.Path(*p.parts[-2:]))
+
+    @property
+    def article_link(self):
+        p = pathlib.Path(self.article_file.path)
+        return 'images/' + str(pathlib.Path(*p.parts[-2:]))
+
 
 class Reference(models.Model):
     company = models.CharField(max_length=100, unique=True)
@@ -153,6 +164,7 @@ class Services(models.Model):
     date_added = models.DateTimeField(auto_now=False, auto_now_add=True)
     priority = models.IntegerField(null=False, unique=True)
     image_file = models.FileField(upload_to='service_icon', blank=True, null=True)
+    #static_location = models.CharField(unique=True, blank=True, null=True)
     descrip = models.CharField(max_length=300, blank=True, null=True)
     objects = ServicesManager()
 
@@ -161,6 +173,11 @@ class Services(models.Model):
 
     def __str__(self):
         return self.service.title()
+
+    @property
+    def link(self):
+        p = pathlib.Path(self.image_file.path)
+        return 'images/' + str(pathlib.Path(*p.parts[-2:]))
 
 
 class Customer(models.Model):

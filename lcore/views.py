@@ -64,7 +64,6 @@ def blog(request):
     with connection.cursor() as cursor:
         sql = ("Select C.name, count(C.name) as cat_count from lcore_article_category as JJ inner join"
                " lcore_category C on JJ.category_id = C.id group by name;")
-        print(sql)
         cursor.execute(sql)
         columns = [col[0] for col in cursor.description]
         category_count = [
@@ -114,7 +113,7 @@ def blog_item(request, pk):
     }
 
     context = {**get_base_context(), **local_context}
-    print(context)
+    # print(context)
     return render(request, template, context)
 
 
@@ -126,14 +125,14 @@ def home(request):
     }
 
     context = {**get_base_context(), **local_context}
-    print(context)
+    # print(context)
     return render(request, template, context)
 
 
 def pdf(request):
     root = pathlib.Path(conf_settings.MEDIA_ROOT)
     file_path = pathlib.Path.joinpath(root, 'blog_image', 'Email_processing.pdf')
-    print(f'{file_path}')
+    # print(f'{file_path}')
     return FileResponse(open(file_path, 'rb'), content_type='application/pdf')
 
 
