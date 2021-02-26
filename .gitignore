@@ -161,7 +161,7 @@ typings/
 # Provided default Pycharm Run/Debug Configurations should be tracked by git
 # In case of local modifications made by Pycharm, use update-index command
 # for each changed file, like this:
-# git update-index --assume-unchanged .idea/sweb.iml
+# git update-index --assume-unchanged .idea/hero.iml
 ### JetBrains template
 # Covers JetBrains IDEs: IntelliJ, RubyMine, PhpStorm, AppCode, PyCharm, CLion, Android Studio and Webstorm
 # Reference: https://intellij-support.jetbrains.com/hc/en-us/articles/206544839
@@ -183,6 +183,7 @@ typings/
 # Gradle:
 .idea/**/gradle.xml
 .idea/**/libraries
+.idea*
 
 # CMake
 cmake-build-debug/
@@ -226,9 +227,6 @@ ehthumbs_vista.db
 
 # Folder config file
 Desktop.ini
-# settings ini
-settings.ini
-
 
 # Recycle Bin used on file shares
 $RECYCLE.BIN/
@@ -321,20 +319,17 @@ Session.vim
 # Auto-generated tag files
 tags
 
-
-### VirtualEnv template
-# Virtualenv
-[Ii]nclude
-[Ll]ib
-[Ll]ib64
-[Ss]cripts
-pyvenv.cfg
-pip-selfcheck.json
-
 ### Project template
 
-# sweb/media/
+hero/media/
 
 .pytest_cache/
+
+
+# .ini
+#.envs/*
+# !.envs/.local/
+# .ini keep using ini files
+.007
 
 
