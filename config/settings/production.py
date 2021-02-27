@@ -1,24 +1,28 @@
 import os
-import django_heroku
+# import django_heroku TODO
 from .base import *  # noqa
 
 # GENERAL
 # ------------------------------------------------------------------------------
 # https://docs.djangoproject.com/en/dev/ref/settings/#secret-key
-SECRET_KEY = os.environ.get("DJANGO_SECRET_KEY")
+SECRET_KEY = config("DJANGO_SECRET_KEY")
 # https://docs.djangoproject.com/en/dev/ref/settings/#allowed-hosts
 ALLOWED_HOSTS = config('ALLOWED_HOSTS_PROD', cast=Csv())
 # DATABASES
 # ------------------------------------------------------------------------------
-#DATABASES["default"] = config("DATABASE_URL")  # noqa F405
+# DATABASES["default"] = config("DATABASE_URL")  # noqa F405
 DATABASES = {
-    'default': {
+    'new': {
         'ENGINE': 'django.db.backends.postgresql',
         'NAME': config('DB_PROD'),
         'USER': config('DB_USER_PROD'),
         'PASSWORD': config('DB_USER_PW'),
         'HOST': '127.0.0.1',
         'PORT': '5432',
+    },
+    'default': {
+        'ENGINE': 'django.db.backends.sqlite3',
+        'NAME': str(ROOT_DIR / 'db.sqlite'),
     }
 }
 DATABASES["default"]["ATOMIC_REQUESTS"] = True  # noqa F405
@@ -28,6 +32,10 @@ DATABASES["default"]["CONN_MAX_AGE"] = config("CONN_MAX_AGE", cast=int)  # noqa 
 # ------------------------------------------------------------------------------
 CACHES = {
     "default": {
+            "BACKEND": "django.core.cache.backends.locmem.LocMemCache",
+            "LOCATION": "",
+        },
+    "redis": {
         "BACKEND": "django_redis.cache.RedisCache",
         "LOCATION": config("REDIS_URL"),
         "OPTIONS": {
@@ -108,7 +116,6 @@ ANYMAIL = {
     "SENDGRID_API_URL": config("MAIL_URL"),
 }
 
-
 # LOGGING
 # ------------------------------------------------------------------------------
 # https://docs.djangoproject.com/en/dev/ref/settings/#logging
@@ -124,7 +131,7 @@ LOGGING = {
     "formatters": {
         "verbose": {
             "format": "%(levelname)s %(asctime)s %(module)s "
-            "%(process)d %(thread)d %(message)s"
+                      "%(process)d %(thread)d %(message)s"
         }
     },
     "handlers": {
@@ -156,4 +163,5 @@ LOGGING = {
 
 # HEROKU - activation
 # ------------------------------------------------------------------------------
-django_heroku.settings(locals())
+# django_heroku.settings(locals())
+# removed 26/2/21 hero did not need this
