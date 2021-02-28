@@ -1,1 +1,7 @@
-done Config interpreter
+done - Fix the single blog page
+done - fix pagination on the blog page
+done - delete blog-single.thml
+done - article extract - hide if the same as the story
+
+done - set laptop env python 3.8.7
+

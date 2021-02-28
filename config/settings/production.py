@@ -1,22 +1,33 @@
+import os
+import django_heroku
 from .base import *  # noqa
+
+# NOTE
+# Env value to be set for the Mail API, called MAILER
 
 # GENERAL
 # ------------------------------------------------------------------------------
 # https://docs.djangoproject.com/en/dev/ref/settings/#secret-key
 SECRET_KEY = config("DJANGO_SECRET_KEY")
 # https://docs.djangoproject.com/en/dev/ref/settings/#allowed-hosts
-ALLOWED_HOSTS = config("DJANGO_ALLOWED_HOSTS",
-                       default=["asharpsystems.com", 
-                       "127.0.0.1", "asw-20210207.herokuapp.com"])
-
+ALLOWED_HOSTS = config('ALLOWED_HOSTS_PROD', cast=Csv())
 # DATABASES
 # ------------------------------------------------------------------------------
+# DATABASES["default"] = config("DATABASE_URL")  # noqa F405
 DATABASES = {
+    'new': {
+        'ENGINE': 'django.db.backends.postgresql',
+        'NAME': config('DB_PROD'),
+        'USER': config('DB_USER_PROD'),
+        'PASSWORD': config('DB_USER_PW'),
+        'HOST': '127.0.0.1',
+        'PORT': '5432',
+    },
     'default': {
         'ENGINE': 'django.db.backends.sqlite3',
-        'NAME':  str(ROOT_DIR / 'hero.sqlite'),
+        'NAME': str(ROOT_DIR / 'db.sqlite'),
     }
-}  # noqa F405
+}
 DATABASES["default"]["ATOMIC_REQUESTS"] = True  # noqa F405
 DATABASES["default"]["CONN_MAX_AGE"] = config("CONN_MAX_AGE", cast=int)  # noqa F405
 
@@ -24,12 +35,16 @@ DATABASES["default"]["CONN_MAX_AGE"] = config("CONN_MAX_AGE", cast=int)  # noqa 
 # ------------------------------------------------------------------------------
 CACHES = {
     "default": {
+            "BACKEND": "django.core.cache.backends.locmem.LocMemCache",
+            "LOCATION": "",
+        },
+    "redis": {
         "BACKEND": "django_redis.cache.RedisCache",
         "LOCATION": config("REDIS_URL"),
         "OPTIONS": {
             "CLIENT_CLASS": "django_redis.client.DefaultClient",
             # Mimicing memcache behavior.
-            # https://github.com/jazzband/django-redis#memcached-exceptions-behavior
+            # http://jazzband.github.io/django-redis/latest/#_memcached_exceptions_behavior
             "IGNORE_EXCEPTIONS": True,
         },
     }
@@ -40,7 +55,7 @@ CACHES = {
 # https://docs.djangoproject.com/en/dev/ref/settings/#secure-proxy-ssl-header
 SECURE_PROXY_SSL_HEADER = ("HTTP_X_FORWARDED_PROTO", "https")
 # https://docs.djangoproject.com/en/dev/ref/settings/#secure-ssl-redirect
-SECURE_SSL_REDIRECT = config("DJANGO_SECURE_SSL_REDIRECT", default=True, cast=bool)
+SECURE_SSL_REDIRECT = config("DJANGO_SECURE_SSL_REDIRECT", cast=bool)
 # https://docs.djangoproject.com/en/dev/ref/settings/#session-cookie-secure
 SESSION_COOKIE_SECURE = True
 # https://docs.djangoproject.com/en/dev/ref/settings/#csrf-cookie-secure
@@ -78,9 +93,9 @@ TEMPLATES[-1]["OPTIONS"]["loaders"] = [  # type: ignore[index] # noqa F405
 # EMAIL
 # ------------------------------------------------------------------------------
 # https://docs.djangoproject.com/en/dev/ref/settings/#default-from-email
-DEFAULT_FROM_EMAIL = "ASSC <noreply@asharpsystems.com>"
+DEFAULT_FROM_EMAIL = config("DJANGO_DEFAULT_FROM_EMAIL")
 # https://docs.djangoproject.com/en/dev/ref/settings/#server-email
-SERVER_EMAIL = DEFAULT_FROM_EMAIL
+SERVER_EMAIL = config("DJANGO_SERVER_EMAIL")
 # https://docs.djangoproject.com/en/dev/ref/settings/#email-subject-prefix
 EMAIL_SUBJECT_PREFIX = config("DJANGO_EMAIL_SUBJECT_PREFIX")
 
@@ -98,10 +113,10 @@ INSTALLED_APPS += ["anymail"]  # noqa F405
 # https://anymail.readthedocs.io/en/stable/esps/sendgrid/
 EMAIL_BACKEND = "anymail.backends.sendgrid.EmailBackend"
 ANYMAIL = {
-    "SENDGRID_API_KEY": 'key',
-    "SENDGRID_GENERATE_MESSAGE_ID": config("SENDGRID_GENERATE_MESSAGE_ID", cast=bool),
-    "SENDGRID_MERGE_FIELD_FORMAT": config("SENDGRID_MERGE_FIELD_FORMAT", cast=bool),
-    "SENDGRID_API_URL": "https://api.sendgrid.com/v3/",
+    "SENDGRID_API_KEY": os.environ.get("MAILER"),
+    "SENDGRID_GENERATE_MESSAGE_ID": config("SENDGRID_GENERATE_MESSAGE_ID"),
+    "SENDGRID_MERGE_FIELD_FORMAT": config("SENDGRID_MERGE_FIELD_FORMAT"),
+    "SENDGRID_API_URL": config("MAIL_URL"),
 }
 
 
@@ -120,7 +135,7 @@ LOGGING = {
     "formatters": {
         "verbose": {
             "format": "%(levelname)s %(asctime)s %(module)s "
-            "%(process)d %(thread)d %(message)s"
+                      "%(process)d %(thread)d %(message)s"
         }
     },
     "handlers": {
@@ -150,5 +165,7 @@ LOGGING = {
     },
 }
 
-# Your stuff...
+# HEROKU - activation
 # ------------------------------------------------------------------------------
+# django_heroku.settings(locals())
+# removed 26/2/21 hero did not need this
