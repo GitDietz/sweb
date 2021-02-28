@@ -119,7 +119,8 @@ ANYMAIL = {
     "SENDGRID_MERGE_FIELD_FORMAT": config("SENDGRID_MERGE_FIELD_FORMAT"),
     "SENDGRID_API_URL": config("MAIL_URL"),
 }
-
+# TODO confirm this direct use of the send grid emailer, remove anymail if it works
+EMAIL_KEY = os.environ.get("MAILER")
 # LOGGING
 # ------------------------------------------------------------------------------
 # https://docs.djangoproject.com/en/dev/ref/settings/#logging
