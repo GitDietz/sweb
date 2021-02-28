@@ -2,7 +2,7 @@
 Base settings to build other settings files upon.
 """
 from pathlib import Path
-from decouple import config, Csv
+from decouple import config
 import environ
 import os
 
