@@ -1,9 +1,9 @@
-AWeb
+Hero
 ====
 
-Corporate website for A Sharp Systems & Consulting
+Deploy A Sharp Systems
 
-.. image:: https://img.shields.io/badge/built%20with-Cookiecutter%20Django-ff69b4.svg
+.. image:: https://img.shields.io/badge/built%20with-Cookiecutter%20Django-ff69b4.svg?logo=cookiecutter
      :target: https://github.com/pydanny/cookiecutter-django/
      :alt: Built with Cookiecutter Django
 .. image:: https://img.shields.io/badge/code%20style-black-000000.svg
@@ -42,7 +42,7 @@ Running type checks with mypy:
 
 ::
 
-  $ mypy sweb
+  $ mypy hero
 
 Test coverage
 ^^^^^^^^^^^^^
@@ -75,6 +75,14 @@ Deployment
 ----------
 
 The following details how to deploy this application.
+
+
+Heroku
+^^^^^^
+
+See detailed `cookiecutter-django Heroku documentation`_.
+
+.. _`cookiecutter-django Heroku documentation`: http://cookiecutter-django.readthedocs.io/en/latest/deployment-on-heroku.html
 
 
 

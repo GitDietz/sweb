@@ -5,9 +5,9 @@
 # from the environment for the first two.
 SPHINXOPTS    ?= 
 SPHINXBUILD   ?= sphinx-build -c .
-SOURCEDIR     = ./_source
+SOURCEDIR     = .
 BUILDDIR      = ./_build
-APP = ../sweb
+APP = ../hero
 
 
 .PHONY: help livehtml apidocs Makefile
@@ -18,11 +18,11 @@ help:
 
 # Build, watch and serve docs with live reload
 livehtml:
-	sphinx-autobuild -b html --open-browser -p 7000 --watch $(APP) -c . $(SOURCEDIR) $(BUILDDIR)/html
+	sphinx-autobuild -b html --open-browser --port 7000 --watch $(APP) -c . $(SOURCEDIR) $(BUILDDIR)/html
 
 # Outputs rst files from django application code
 apidocs:
-	sphinx-apidoc -o $(SOURCEDIR)/api ../sweb
+	sphinx-apidoc -o $(SOURCEDIR)/api ../hero
 
 # Catch-all target: route all unknown targets to Sphinx using the new
 # "make mode" option.  $(O) is meant as a shortcut for $(SPHINXOPTS).

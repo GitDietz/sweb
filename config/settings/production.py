@@ -1,6 +1,8 @@
 import os
+
 from decouple import Csv
 # import django_heroku TODO
+
 from .base import *  # noqa
 
 # NOTE
@@ -119,6 +121,7 @@ ANYMAIL = {
     "SENDGRID_MERGE_FIELD_FORMAT": config("SENDGRID_MERGE_FIELD_FORMAT"),
     "SENDGRID_API_URL": config("MAIL_URL"),
 }
+
 
 # LOGGING
 # ------------------------------------------------------------------------------
