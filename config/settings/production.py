@@ -97,7 +97,7 @@ TEMPLATES[-1]["OPTIONS"]["loaders"] = [  # type: ignore[index] # noqa F405
 # EMAIL
 # ------------------------------------------------------------------------------
 # https://docs.djangoproject.com/en/dev/ref/settings/#default-from-email
-DEFAULT_FROM_EMAIL = config("DJANGO_DEFAULT_FROM_EMAIL")
+DEFAULT_FROM_EMAIL = 'asharpsystems@gamil.com'  #DJANGO_DEFAULT_FROM_EMAIL,  config("DJANGO_DEFAULT_FROM_EMAIL")
 # https://docs.djangoproject.com/en/dev/ref/settings/#server-email
 SERVER_EMAIL = config("DJANGO_SERVER_EMAIL")
 # https://docs.djangoproject.com/en/dev/ref/settings/#email-subject-prefix
