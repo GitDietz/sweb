@@ -8,7 +8,6 @@ from .views import about, base, blog, blog_item, contact, home, pdf, privacy, se
 
 app_name = 'lcore'
 urlpatterns = [
-    # path("home", TemplateView.as_view(template_name="pages/home.html"), name="home"),
     path('about', about, name='about'),
     re_path('article/(?P<pk>\d+)', show_pdf, name='show_pdf'),
     path('base', base, name='base'),

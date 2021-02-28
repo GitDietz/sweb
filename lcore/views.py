@@ -54,8 +54,6 @@ def base(request):
 def blog(request):
     """
     General blog page with summary of blogs and links to individuals
-    :param request:
-    :return:
     """
     template = "blog.html"
     active_articles = Article.objects.visible()
@@ -95,7 +93,7 @@ def blog_item(request, pk):
     """
     more detail on the specific blog item to read the more detailed description
     :param request:
-    :param pk:
+    :param pk:for Article
     :return: render
     """
     try:
@@ -113,7 +111,6 @@ def blog_item(request, pk):
     }
 
     context = {**get_base_context(), **local_context}
-    # print(context)
     return render(request, template, context)
 
 
@@ -125,14 +122,15 @@ def home(request):
     }
 
     context = {**get_base_context(), **local_context}
-    # print(context)
     return render(request, template, context)
 
 
 def pdf(request):
+    """
+    Testing view for a PDF file
+    """
     root = pathlib.Path(conf_settings.MEDIA_ROOT)
     file_path = pathlib.Path.joinpath(root, 'blog_image', 'Email_processing.pdf')
-    # print(f'{file_path}')
     return FileResponse(open(file_path, 'rb'), content_type='application/pdf')
 
 
@@ -146,7 +144,7 @@ def show_pdf(request, pk):
     if filename == '':
         return redirect('lcore:blog')
     file_path = pathlib.Path.joinpath(root, filename)
-    print(f'{file_path}')
+    # print(f'{file_path}')
     return FileResponse(open(file_path, 'rb'), content_type='application/pdf')
 
 
@@ -158,7 +156,6 @@ def services(request):
         'services': services,
         'features': features,
     }
-
     context = {**get_base_context(), **local_context}
     return render(request, template, context)
 
