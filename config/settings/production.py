@@ -13,7 +13,8 @@ from .base import *  # noqa
 # https://docs.djangoproject.com/en/dev/ref/settings/#secret-key
 SECRET_KEY = config("DJANGO_SECRET_KEY")
 # https://docs.djangoproject.com/en/dev/ref/settings/#allowed-hosts
-ALLOWED_HOSTS = config('ALLOWED_HOSTS_PROD', cast=Csv())
+# ALLOWED_HOSTS = config('ALLOWED_HOSTS_PROD', cast=Csv())
+ALLOWED_HOSTS = ['asharpsystems.com', 'asw-20210207.herokuapp.com']
 # DATABASES
 # ------------------------------------------------------------------------------
 # DATABASES["default"] = config("DATABASE_URL")  # noqa F405
