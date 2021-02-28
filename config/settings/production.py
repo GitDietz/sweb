@@ -19,14 +19,14 @@ ALLOWED_HOSTS = ['asharpsystems.com', 'asw-20210207.herokuapp.com']
 # ------------------------------------------------------------------------------
 # DATABASES["default"] = config("DATABASE_URL")  # noqa F405
 DATABASES = {
-    'new': {
-        'ENGINE': 'django.db.backends.postgresql',
-        'NAME': config('DB_PROD'),
-        'USER': config('DB_USER_PROD'),
-        'PASSWORD': config('DB_USER_PW'),
-        'HOST': '127.0.0.1',
-        'PORT': '5432',
-    },
+    # 'new': {
+    #    'ENGINE': 'django.db.backends.postgresql',
+    #    'NAME': config('DB_PROD'),
+    #    'USER': config('DB_USER_PROD'),
+    #    'PASSWORD': config('DB_USER_PW'),
+    #    'HOST': '127.0.0.1',
+    #    'PORT': '5432',
+    # },
     'default': {
         'ENGINE': 'django.db.backends.sqlite3',
         'NAME': str(ROOT_DIR / 'db.sqlite'),
