@@ -2,21 +2,18 @@
 Base settings to build other settings files upon.
 """
 from pathlib import Path
-from decouple import config, Csv
-import environ
-import os
+from decouple import config
+#import environ
 
 ROOT_DIR = Path(__file__).resolve(strict=True).parent.parent.parent
-BASE_DIR = ROOT_DIR
-# sweb/
-APPS_DIR = ROOT_DIR / "sweb"
-TEMPLATE_DIR = ROOT_DIR / 'templates'
-# ROOT_DIR.joinpath('templates')
+# hero/
+APPS_DIR = ROOT_DIR / "hero"
+# env = environ.Env()
 
-READ_DOT_ENV_FILE = config("DJANGO_READ_DOT_ENV_FILE", cast=bool)
+# READ_DOT_ENV_FILE = True # env.bool("DJANGO_READ_DOT_ENV_FILE", default=False)
 # if READ_DOT_ENV_FILE:
-#     # OS environment variables take precedence over variables from .env
-#     env.read_env(str(ROOT_DIR / ".env"))
+#     # OS environment variables take precedence over variables from .ini
+#     env.read_env(str(ROOT_DIR / ".ini"))
 
 # GENERAL
 # ------------------------------------------------------------------------------
@@ -43,18 +40,15 @@ LOCALE_PATHS = [str(ROOT_DIR / "locale")]
 # DATABASES
 # ------------------------------------------------------------------------------
 # https://docs.djangoproject.com/en/dev/ref/settings/#databases
-# export DATABASE_URL="sqlite:///db.sqlite"  run this in terminal
-# the below works on commandline but not on pycharm
+
 # DATABASES = {
-#     #"default": env.db("DATABASE_URL", default="postgres:///sweb")
+#     # "default": env.db("DATABASE_URL", default="postgres:///hero")
+#     'default': {
+#         'ENGINE': 'django.db.backends.sqlite3',
+#         'NAME': 'hero',
+#     }
 # }
-DATABASES = {
-    "default": {
-        'ENGINE': 'django.db.backends.sqlite3',
-        'NAME': str(ROOT_DIR / 'db.sqlite'),
-    }
-}
-DATABASES["default"]["ATOMIC_REQUESTS"] = True
+# DATABASES["default"]["ATOMIC_REQUESTS"] = True
 
 # URLS
 # ------------------------------------------------------------------------------
@@ -84,9 +78,8 @@ THIRD_PARTY_APPS = [
 ]
 
 LOCAL_APPS = [
-    "sweb.users.apps.UsersConfig",
-    'lcore',
-    'django_db_logger',
+    "hero.users.apps.UsersConfig",
+    # Your stuff: custom apps go here
 ]
 # https://docs.djangoproject.com/en/dev/ref/settings/#installed-apps
 INSTALLED_APPS = DJANGO_APPS + THIRD_PARTY_APPS + LOCAL_APPS
@@ -94,7 +87,7 @@ INSTALLED_APPS = DJANGO_APPS + THIRD_PARTY_APPS + LOCAL_APPS
 # MIGRATIONS
 # ------------------------------------------------------------------------------
 # https://docs.djangoproject.com/en/dev/ref/settings/#migration-modules
-MIGRATION_MODULES = {"sites": "sweb.contrib.sites.migrations"}
+MIGRATION_MODULES = {"sites": "hero.contrib.sites.migrations"}
 
 # AUTHENTICATION
 # ------------------------------------------------------------------------------
@@ -105,10 +98,8 @@ AUTHENTICATION_BACKENDS = [
 ]
 # https://docs.djangoproject.com/en/dev/ref/settings/#auth-user-model
 AUTH_USER_MODEL = "users.User"
-
 # https://docs.djangoproject.com/en/dev/ref/settings/#login-redirect-url
 LOGIN_REDIRECT_URL = "users:redirect"
-
 # https://docs.djangoproject.com/en/dev/ref/settings/#login-url
 LOGIN_URL = "account_login"
 
@@ -124,7 +115,9 @@ PASSWORD_HASHERS = [
 ]
 # https://docs.djangoproject.com/en/dev/ref/settings/#auth-password-validators
 AUTH_PASSWORD_VALIDATORS = [
-    {"NAME": "django.contrib.auth.password_validation.UserAttributeSimilarityValidator"},
+    {
+        "NAME": "django.contrib.auth.password_validation.UserAttributeSimilarityValidator"
+    },
     {"NAME": "django.contrib.auth.password_validation.MinimumLengthValidator"},
     {"NAME": "django.contrib.auth.password_validation.CommonPasswordValidator"},
     {"NAME": "django.contrib.auth.password_validation.NumericPasswordValidator"},
@@ -163,8 +156,7 @@ STATICFILES_FINDERS = [
 # MEDIA
 # ------------------------------------------------------------------------------
 # https://docs.djangoproject.com/en/dev/ref/settings/#media-root
-MEDIA_ROOT = str(ROOT_DIR / "media")
-print(f'media root is {MEDIA_ROOT}')
+MEDIA_ROOT = str(APPS_DIR / "media")
 # https://docs.djangoproject.com/en/dev/ref/settings/#media-url
 MEDIA_URL = "/media/"
 
@@ -176,7 +168,7 @@ TEMPLATES = [
         # https://docs.djangoproject.com/en/dev/ref/settings/#std:setting-TEMPLATES-BACKEND
         "BACKEND": "django.template.backends.django.DjangoTemplates",
         # https://docs.djangoproject.com/en/dev/ref/settings/#template-dirs
-        "DIRS": [str(ROOT_DIR / "templates")],
+        "DIRS": [str(APPS_DIR / "templates")],
         "OPTIONS": {
             # https://docs.djangoproject.com/en/dev/ref/settings/#template-loaders
             # https://docs.djangoproject.com/en/dev/ref/templates/api/#loader-types
@@ -194,7 +186,7 @@ TEMPLATES = [
                 "django.template.context_processors.static",
                 "django.template.context_processors.tz",
                 "django.contrib.messages.context_processors.messages",
-                "sweb.utils.context_processors.settings_context",
+                "hero.utils.context_processors.settings_context",
             ],
         },
     }
@@ -225,17 +217,16 @@ X_FRAME_OPTIONS = "DENY"
 # EMAIL
 # ------------------------------------------------------------------------------
 # https://docs.djangoproject.com/en/dev/ref/settings/#email-backend
-EMAIL_BACKEND = config("DJANGO_EMAIL_BACKEND")
+EMAIL_BACKEND = config('DJANGO_EMAIL_BACKEND')
 # https://docs.djangoproject.com/en/dev/ref/settings/#email-timeout
 EMAIL_TIMEOUT = 5
-EMAIL_KEY = os.environ.get('MAIL_API_KEY') # no default or cast used
-EMAIL_FROM = config('MAIL_SENDER')
+
 # ADMIN
 # ------------------------------------------------------------------------------
 # Django Admin URL.
 ADMIN_URL = "admin/"
 # https://docs.djangoproject.com/en/dev/ref/settings/#admins
-ADMINS = [("""D Thierry""", "asharpsystems@gmail.com")]
+ADMINS = [("""Dieter Thierry""", "asharpsystems@gmail.com")]
 # https://docs.djangoproject.com/en/dev/ref/settings/#managers
 MANAGERS = ADMINS
 
@@ -243,6 +234,7 @@ MANAGERS = ADMINS
 # ------------------------------------------------------------------------------
 # https://docs.djangoproject.com/en/dev/ref/settings/#logging
 # See https://docs.djangoproject.com/en/dev/topics/logging for
+# more details on how to customize your logging configuration.
 LOGGING = {
     "version": 1,
     "disable_existing_loggers": False,
@@ -250,9 +242,6 @@ LOGGING = {
         "verbose": {
             "format": "%(levelname)s %(asctime)s %(module)s "
             "%(process)d %(thread)d %(message)s"
-        },
-        "db_simple": {
-            "format": "%(levelname)s %(asctime)s %(module)s %(function)s %(message)s"
         }
     },
     "handlers": {
@@ -260,26 +249,15 @@ LOGGING = {
             "level": "DEBUG",
             "class": "logging.StreamHandler",
             "formatter": "verbose",
-        },
-        "db_log": {
-            "level": "INFO",
-            "class": 'django_db_logger.db_log_handler.DatabaseLogHandler',
-            "formatter": "db_simple",
         }
     },
-    "root": {
-        "level": "INFO", "handlers": ["console"]
-        },
-    'loggers': {
-        'db': {
-            'handlers': ['db_log'],
-            'level': 'INFO'
-        }
-    }
+    "root": {"level": "INFO", "handlers": ["console"]},
 }
 
+
 # django-allauth
-ACCOUNT_ALLOW_REGISTRATION = config("DJANGO_ACCOUNT_ALLOW_REGISTRATION", cast=bool)
+# ------------------------------------------------------------------------------
+ACCOUNT_ALLOW_REGISTRATION = config("DJANGO_ACCOUNT_ALLOW_REGISTRATION")
 # https://django-allauth.readthedocs.io/en/latest/configuration.html
 ACCOUNT_AUTHENTICATION_METHOD = "username"
 # https://django-allauth.readthedocs.io/en/latest/configuration.html
@@ -287,9 +265,9 @@ ACCOUNT_EMAIL_REQUIRED = True
 # https://django-allauth.readthedocs.io/en/latest/configuration.html
 ACCOUNT_EMAIL_VERIFICATION = "mandatory"
 # https://django-allauth.readthedocs.io/en/latest/configuration.html
-ACCOUNT_ADAPTER = "sweb.users.adapters.AccountAdapter"
+ACCOUNT_ADAPTER = "hero.users.adapters.AccountAdapter"
 # https://django-allauth.readthedocs.io/en/latest/configuration.html
-SOCIALACCOUNT_ADAPTER = "sweb.users.adapters.SocialAccountAdapter"
+SOCIALACCOUNT_ADAPTER = "hero.users.adapters.SocialAccountAdapter"
 
 
 # Your stuff...
