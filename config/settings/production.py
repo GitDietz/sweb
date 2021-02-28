@@ -1,5 +1,5 @@
 import os
-from decouple import Csv
+from decouple import config, Csv
 # import django_heroku TODO
 from .base import *  # noqa
 
@@ -16,14 +16,14 @@ ALLOWED_HOSTS = config('ALLOWED_HOSTS_PROD', cast=Csv())
 # ------------------------------------------------------------------------------
 # DATABASES["default"] = config("DATABASE_URL")  # noqa F405
 DATABASES = {
-    'new': {
-        'ENGINE': 'django.db.backends.postgresql',
-        'NAME': config('DB_PROD'),
-        'USER': config('DB_USER_PROD'),
-        'PASSWORD': config('DB_USER_PW'),
-        'HOST': '127.0.0.1',
-        'PORT': '5432',
-    },
+    # 'new': {
+    #     'ENGINE': 'django.db.backends.postgresql',
+    #     'NAME': config('DB_PROD'),
+    #     'USER': config('DB_USER_PROD'),
+    #     'PASSWORD': config('DB_USER_PW'),
+    #     'HOST': '127.0.0.1',
+    #     'PORT': '5432',
+    # },
     'default': {
         'ENGINE': 'django.db.backends.sqlite3',
         'NAME': str(ROOT_DIR / 'db.sqlite'),
