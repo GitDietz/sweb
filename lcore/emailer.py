@@ -28,7 +28,7 @@ def send_email_old(body, destination, subject):
         # print(response.headers)
         return 0, ''
     except Exception as e:
-        logging.getLogger("info_logger").info("str(e)")
+        logging.getLogger("info_logger").info(f"Error: {e}")
         return 1, sender
 
 
@@ -65,7 +65,7 @@ def send_email(**email_kwargs):
         # print(response.headers)
         return 0, ''
     except Exception as e:
-        logging.getLogger("info_logger").info("str(e)")
+        logging.getLogger("info_logger").info(f"Error: {e}")
         return 1, sender
 
 
