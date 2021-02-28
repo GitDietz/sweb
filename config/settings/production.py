@@ -2,6 +2,9 @@ import os
 # import django_heroku TODO
 from .base import *  # noqa
 
+# NOTE
+# Env value to be set for the Mail API, called MAILER
+
 # GENERAL
 # ------------------------------------------------------------------------------
 # https://docs.djangoproject.com/en/dev/ref/settings/#secret-key
@@ -110,7 +113,7 @@ INSTALLED_APPS += ["anymail"]  # noqa F405
 # https://anymail.readthedocs.io/en/stable/esps/sendgrid/
 EMAIL_BACKEND = "anymail.backends.sendgrid.EmailBackend"
 ANYMAIL = {
-    "SENDGRID_API_KEY": config("MAIL_API_KEY"),
+    "SENDGRID_API_KEY": os.environ.get("MAILER"),
     "SENDGRID_GENERATE_MESSAGE_ID": config("SENDGRID_GENERATE_MESSAGE_ID"),
     "SENDGRID_MERGE_FIELD_FORMAT": config("SENDGRID_MERGE_FIELD_FORMAT"),
     "SENDGRID_API_URL": config("MAIL_URL"),
