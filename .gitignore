@@ -179,6 +179,7 @@ typings/
 .idea/**/sqlDataSources.xml
 .idea/**/dynamic.xml
 .idea/**/uiDesigner.xml
+.idea/*
 
 # Gradle:
 .idea/**/gradle.xml
@@ -338,3 +339,4 @@ pip-selfcheck.json
 .pytest_cache/
 
 
+config/settings/My_settings_not)used.ini
